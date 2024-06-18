@@ -1,7 +1,7 @@
 import torch
 import matplotlib.pyplot as plt
 
-class Admission_MDP_vectorised:   ## Not sure whether this is correct
+class Admission_MDP:
   def __init__(self, goal, admission_decay = torch.tensor([0.31, 0.12]), batch_size = 128, num_classes=2,
                acceptance_probabilities=torch.tensor([0.631, .02]), max_time=10,
                patience=4, new_students=torch.tensor([10, 7]), epsilon=0.3, alpha=0.1,
@@ -32,7 +32,7 @@ class Admission_MDP_vectorised:   ## Not sure whether this is correct
         sent_offers_matrix = torch.zeros((self.batch, self.num_classes, self.patience), dtype=int)   ## (batch_size, num_classes, patience)
         total_accepted = torch.zeros(self.batch, dtype = int)                                                     ## (batch_size)
 
-        return pending_offers, sent_offers_matrix, total_accepted  ## Can this not be an array? no because the size of each dimension is differnt
+        return pending_offers, sent_offers_matrix, total_accepted  
 
   def _admit_decay(self): ## Weak intrenal method to populate the delayed_acceptance_probabilities
         delayed_acceptance_probabilities = torch.zeros((self.num_classes, self.patience))
@@ -52,7 +52,7 @@ class Admission_MDP_vectorised:   ## Not sure whether this is correct
 
   def _reward(self, total_Accepted): ## Internal method for reward calculation
     ## L2 penalty of the difference between accepted goal and another penalty if no offers are sent.
-    reward = -abs(self.goal - total_Accepted)  ## Broadcasting should take care of this
+    reward = -abs(self.goal - total_Accepted) 
     return reward
 
   def _new_student_generator(self):
@@ -150,4 +150,5 @@ class Admission_MDP_vectorised:   ## Not sure whether this is correct
         plt.show()
 
         return self.q_table
+      
 
